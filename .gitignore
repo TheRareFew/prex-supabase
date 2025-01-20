@@ -1,0 +1,12 @@
+# Supabase
+.env
+.env.*
+!.env.example
+
+# Config files
+config.prod.toml
+config.dev.toml
+
+# Local development
+.temp/
+.vscode/
