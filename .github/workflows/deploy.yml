@@ -32,10 +32,7 @@ jobs:
           
       - name: Deploy Migrations
         run: |
-          TMPFILE=$(mktemp)
-          echo "$DB_PASSWORD" > "$TMPFILE"
-          supabase link --project-ref $PROJECT_ID --password-stdin < "$TMPFILE"
-          rm -f "$TMPFILE"
+          supabase link --project-ref $PROJECT_ID -p "$DB_PASSWORD"
           supabase db push
           
       - name: Cleanup
