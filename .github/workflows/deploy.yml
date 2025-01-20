@@ -30,14 +30,12 @@ jobs:
           echo '${{ secrets.SUPABASE_PROD_CONFIG }}' | base64 -d > supabase/config.toml
           
       - name: Deploy Migrations
+        shell: bash
         run: |
-          echo "${{ secrets.SUPABASE_DB_PASSWORD }}" > password.txt
-          supabase link --project-ref $PROJECT_ID < password.txt
-          rm password.txt
+          supabase link --project-ref "$PROJECT_ID" -p '${{ secrets.SUPABASE_DB_PASSWORD }}'
           supabase db push
           
       - name: Cleanup
         if: always()  # Run even if previous steps fail
         run: |
-          rm -f supabase/config.toml
-          rm -f password.txt 
+          rm -f supabase/config.toml 
