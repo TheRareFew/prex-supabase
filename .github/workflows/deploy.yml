@@ -12,8 +12,8 @@ jobs:
 
     env:
       SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
+      SUPABASE_DB_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
       PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
-      DATABASE_URL: ${{ secrets.SUPABASE_DB_URL }}
 
     steps:
       - uses: actions/checkout@v3
@@ -31,9 +31,6 @@ jobs:
           echo '${{ secrets.SUPABASE_PROD_CONFIG }}' | base64 -d > supabase/config.toml
           
       - name: Deploy Migrations
-        shell: bash
-        env:
-          DATABASE_URL: ${{ secrets.SUPABASE_DB_URL }}
         run: |
           supabase link --project-ref "$PROJECT_ID"
           supabase db push
