@@ -23,7 +23,7 @@ jobs:
           
       - name: Setup Production Config
         run: |
-          echo "${{ secrets.SUPABASE_PROD_CONFIG }}" > config.toml
+          echo '${{ secrets.SUPABASE_PROD_CONFIG }}' | base64 -d > config.toml
           
       - name: Deploy Migrations
         run: |
