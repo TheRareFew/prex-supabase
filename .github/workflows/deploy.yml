@@ -32,13 +32,13 @@ jobs:
           
       - name: Deploy Migrations
         run: |
-          echo "$DB_PASSWORD" > password.txt
-          supabase link --project-ref $PROJECT_ID --password-stdin < password.txt
-          rm password.txt
+          TMPFILE=$(mktemp)
+          echo "$DB_PASSWORD" > "$TMPFILE"
+          supabase link --project-ref $PROJECT_ID --password-stdin < "$TMPFILE"
+          rm -f "$TMPFILE"
           supabase db push
           
       - name: Cleanup
         if: always()  # Run even if previous steps fail
         run: |
-          rm -f supabase/config.toml
-          rm -f password.txt 
+          rm -f supabase/config.toml 
