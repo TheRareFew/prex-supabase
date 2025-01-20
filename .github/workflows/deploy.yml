@@ -21,17 +21,15 @@ jobs:
         with:
           version: latest
           
+      - name: Setup Production Config
+        run: |
+          echo "${{ secrets.SUPABASE_PROD_CONFIG }}" > config.toml
+          
       - name: Deploy Migrations
         run: |
-          # Backup development config if it exists
-          [ -f config.toml ] && cp config.toml config.dev.toml || true
-          
-          # Use production config
-          cp config.prod.toml config.toml
-          
-          # Deploy
           supabase link --project-ref $PROJECT_ID
           supabase db push
           
-          # Restore development config if it existed
-          [ -f config.dev.toml ] && cp config.dev.toml config.toml || true 
+      - name: Cleanup
+        if: always()  # Run even if previous steps fail
+        run: rm -f config.toml 
