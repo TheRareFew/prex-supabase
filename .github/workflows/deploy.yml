@@ -21,9 +21,13 @@ jobs:
         with:
           version: latest
           
+      - name: Initialize Supabase
+        run: |
+          supabase init
+          
       - name: Setup Production Config
         run: |
-          echo '${{ secrets.SUPABASE_PROD_CONFIG }}' | base64 -d > config.toml
+          echo '${{ secrets.SUPABASE_PROD_CONFIG }}' | base64 -d > supabase/config.toml
           
       - name: Deploy Migrations
         run: |
@@ -32,4 +36,4 @@ jobs:
           
       - name: Cleanup
         if: always()  # Run even if previous steps fail
-        run: rm -f config.toml 
+        run: rm -f supabase/config.toml 
