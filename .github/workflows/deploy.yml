@@ -13,7 +13,6 @@ jobs:
     env:
       SUPABASE_ACCESS_TOKEN: ${{ secrets.SUPABASE_ACCESS_TOKEN }}
       PROJECT_ID: ${{ secrets.SUPABASE_PROJECT_ID }}
-      POSTGRES_PASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
 
     steps:
       - uses: actions/checkout@v3
@@ -31,13 +30,14 @@ jobs:
           echo '${{ secrets.SUPABASE_PROD_CONFIG }}' | base64 -d > supabase/config.toml
           
       - name: Deploy Migrations
-        env:
-          PGPASSWORD: ${{ secrets.SUPABASE_DB_PASSWORD }}
         run: |
-          supabase link --project-ref $PROJECT_ID
+          echo "${{ secrets.SUPABASE_DB_PASSWORD }}" > password.txt
+          supabase link --project-ref $PROJECT_ID < password.txt
+          rm password.txt
           supabase db push
           
       - name: Cleanup
         if: always()  # Run even if previous steps fail
         run: |
-          rm -f supabase/config.toml 
+          rm -f supabase/config.toml
+          rm -f password.txt 
