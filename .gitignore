@@ -6,6 +6,7 @@
 # Config files
 config.prod.toml
 config.dev.toml
+config.toml
 
 # Local development
 .temp/
