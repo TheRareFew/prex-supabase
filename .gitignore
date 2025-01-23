@@ -11,3 +11,7 @@ config.toml
 # Local development
 .temp/
 .vscode/
+# Supabase
+.branches
+.temp
+.env
